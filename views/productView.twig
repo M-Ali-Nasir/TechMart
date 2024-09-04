@@ -1,0 +1,234 @@
+{% extends "layout.twig" %} {% block main %}{% include("/components/nav.twig")
+with {'user': user, 'categories':categories, 'subcategories':subcategories} %}
+<!--Main layout-->
+
+<style>
+
+  .star-rating {
+    direction: rtl; /* Right-to-left for displaying stars in the correct order */
+    unicode-bidi: bidi-override;
+    font-size: 2em;
+    display: inline-block;
+}
+
+.star-rating input[type="radio"] {
+    display: none; /* Hide radio buttons */
+}
+
+.star-rating label {
+    color: #ddd;
+    cursor: pointer;
+}
+
+.star-rating input[type="radio"]:checked ~ label {
+    color: #f5c518; /* Highlight stars when selected */
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #f5c518; /* Highlight stars on hover */
+}
+
+</style>
+<main class="pt-5">
+  <div class="container mt-5">
+    <!--Grid row-->
+    <div class="row">
+      <!--Grid column-->
+      <div class="col-md-6 mb-4">
+        <img
+          src="../assets/imgs/products/{{ product['image'] }}"
+          class="img-fluid w-50"
+          alt=""
+        />
+      </div>
+      <!--Grid column-->
+      <!--Grid column-->
+      <div class="col-md-6 mb-4 pt-5">
+        <!--Content-->
+        <div class="p-4">
+          <div class="mb-3"></div>
+
+          <p class="lead">
+            <span>{{ product["price"] }}$</span>
+          </p>
+
+          <strong
+            ><p style="font-size: 20px">{{ product["name"] }}</p></strong
+          >
+
+          <p>
+            {{ product["description"] }}
+          </p>
+
+          <form
+            class="d-flex justify-content-left"
+            action="controllers/AddToCart.php"
+            method="post"
+          >
+            <!-- Default input -->
+            <div class="form-outline me-1" style="width: 100px">
+              <input
+                id="quantity"
+                type="number"
+                value="1"
+                class="form-control border border-2"
+                min="1"
+                ;
+                name="quantity"
+              />
+            </div>
+            <input type="text" name="product_id" value={{ product['id'] }} hidden>
+            <input type="text" name="price" value={{ product['price'] }} hidden>
+            {% if user %} {#
+            <button class="btn btn-primary ms-1" type="submit">
+              Add to cart
+              <i class="fas fa-shopping-cart ms-1"></i>
+            </button>
+            #}
+            <button
+              id="add-to-cart-btn"
+              data-product-id={{ product["id"] }}
+              class="btn btn-primary ms-1"
+            >
+              Add to Cart
+            </button>
+
+            {% else %}
+            <input class="btn btn-primary ms-1" type="submit" value="Add to cart" name="submitlogin">
+              
+            {% endif %}
+          </form>
+        </div>
+        <!--Content-->
+      </div>
+      <!--Grid column-->
+    </div>
+    <!--Grid row-->
+
+    <hr />
+
+
+     <!-- Card -->
+
+{% if reviewable == 1 %}
+
+     <div class="container py-5">
+      <form action="ProductView.php" method="post">
+      <p class="mb-0">Home much will you rate the Product?</p>
+
+      <div class="star-rating mb-3">  
+        <input type="radio" id="star5" name="rating" value="5" hidden/>
+        <label class="fs-3" for="star5" title="5 stars">&#9733;</label>
+        <input type="radio" id="star4" name="rating" value="4" hidden/>
+        <label class="fs-3" for="star4" title="4 stars">&#9733;</label>
+        <input type="radio" id="star3" name="rating" value="3" hidden/>
+        <label class="fs-3" for="star3" title="3 stars">&#9733;</label>
+        <input type="radio" id="star2" name="rating" value="2" hidden/>
+        <label class="fs-3" for="star2" title="2 stars">&#9733;</label>
+        <input type="radio" id="star1" name="rating" value="1" hidden/>
+        <label class="fs-3" for="star1" title="1 star">&#9733;</label>
+        <input class="border border-0 bg-white" style="width: 50px;" type="number" max="5" min="0" id="totalStars" name="totalStars" value="" hidden>
+        <span class="" id="totalStar"></span>
+    </div>
+    <div>
+      <label for="review">Feedback: </label>
+      <input type="text" id="review" name="review" class="form-control">
+      <input type="number" id="product_id" name="product_id" class="form-control" value="{{ product['id'] }}" hidden>
+      <input type="number" id="user_id" name="user_id" class="form-control" value="{{ user['id'] }}" hidden>
+      <input type="submit" class="btn btn-primary my-1 mt-2" name="submitReview" value="Submit">
+    </div>
+  </form>
+     </div>
+     {% endif %}
+  <div class="card mb-4">
+      <div class="card-body">
+       
+        <!-- List Group -->
+        <ul class="list-group list-group-flush border-top">
+            <!-- List Group Item -->
+            {% if reviews %}
+            {% for review in reviews %}
+              
+            <li class="list-group-item px-0 py-4">
+                <div class="d-flex">
+                   
+                    <div class="ms-3 mt-2">
+                        <div
+                            class="d-flex align-items-center justify-content-between">
+                            <div>
+                              {% for user in users %}
+                                {% if user['id'] == review['user_id'] %}
+                                <h4 class="mb-0">{{ user['username'] }}</h4>
+                                <span class="text-muted fs-6">2
+                                    {{ user['email'] }}</span>
+                                {% endif %}
+                              {% endfor %}
+                              {% for i in 1..review['rating'] %}
+                              <i
+                              class="mdi mdi-star me-n1 mb-2 text-warning fs-6"></i>
+                              {% endfor %}
+                            </div>
+                            
+                        </div>
+                        <div class="mt-2">
+                            <span class="me-1">
+                              {% for i in 1..review['rating'] %}
+                              <i class="fa fa-star rating-color"></i>
+                              {% endfor %}
+                              {% set stars = 5 - review['rating'] %}
+                              {% for i in 1..stars %}
+                              <i class="fa fa-star"></i>
+                              {% endfor %}
+                                <i
+                                    class="mdi mdi-star me-n1 mb-2 text-warning fs-6"></i>
+                                <i
+                                    class="mdi mdi-star me-n1 mb-2 text-warning fs-6"></i>
+                                <i
+                                    class="mdi mdi-star me-n1 mb-2 text-warning fs-6"></i>
+                                <i
+                                    class="mdi mdi-star me-n1 mb-2 text-warning fs-6"></i>
+                                <i
+                                    class="mdi mdi-star mb-2 text-warning fs-6"></i>
+                            </span>
+                            
+                            <p class="mt-2">
+                               {{ review['review'] }}
+                            </p>
+                            
+                        </div>
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+
+            {% else %}
+              No Reviews
+            {% endif %}
+            
+            
+            
+        </ul>
+    </div>
+</div>
+
+
+
+  </div>
+</main>
+
+<script>
+  const stars = document.querySelectorAll('.star-rating input');
+  const totalStars = document.querySelector('#totalStars');
+  const totalStar = document.querySelector('#totalStar');
+stars.forEach(star => {
+    star.addEventListener('change', function() {
+        const ratingValue = this.value;
+        totalStars.value = ratingValue;
+        totalStar.innerHTML = ratingValue;
+        console.log(`Rating selected: ${ratingValue} stars`);
+        // You can send this value to your server or use it as needed
+    });
+});
+</script>
+{% include "/components/footer.twig" %} {% endblock %}

@@ -1,0 +1,6 @@
+{% extends 'layout.twig' %} {% block title %}Home - Tech Mart{% endblock %} {%
+block main %} {% include("/components/nav.twig") with {'user': user,
+'categories':categories, 'subcategories':subcategories} %} {%
+include("/components/header.twig") with {'user': user} %} {% block home %}{%
+endblock %} {% include("/components/footer.twig") with {'user': user} %} {%
+endblock %}

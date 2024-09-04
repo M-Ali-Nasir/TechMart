@@ -1,0 +1,131 @@
+{% extends "dashboardlayout.twig" %} {% block main %}
+<div>
+  <div class="container mt-5">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit product</h5>
+      </div>
+      <form action="AddProduct.php" method="post" enctype="multipart/form-data">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="name" class="form-label">Product Name</label>
+            {% if err['name'] %}
+            <p class="text-danger">{{ err["name"] }}</p>
+            {% endif %}
+            <input type="text" class="form-control" id="name" name="name" />
+          </div>
+          <div class="mb-3">
+            <label for="description" class="form-label"
+              >Product Description</label
+            >
+            {% if err["description"] %}
+            <p class="text-danger">{{ err["description"] }}</p>
+            {% endif %}
+            <input
+              type="text"
+              class="form-control"
+              id="description"
+              name="description"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="category" class="form-label">Product Category</label>
+            {% if err["category"] %}
+            <p class="text-danger">{{ err["category"] }}</p>
+            {% endif %}
+            <select
+              name="category_id"
+              id="category-{{ product['id'] }}"
+              class="form-control"
+            >
+              <option value="">Select Category</option>
+              {% for category in categories %}
+              <option value="{{ category['id'] }}">
+                {{ category["name"] }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="subcategory-{{ product['id'] }}" class="form-label"
+              >Product Subcategory</label
+            >
+            {% if err["subcategory"] %}
+            <p class="text-danger">{{ err["subcategory"] }}</p>
+            {% endif %}
+            <select
+              name="subcategory_id"
+              id="subcategory-{{ product['id'] }}"
+              class="form-control"
+            >
+              {% for subcategory in subcategories %}{% if
+              subcategory['category_id'] == product['category_id'] %}
+              <option value="{{ subcategory['id'] }}">
+                {{ subcategory["name"] }}
+              </option>
+              {% endif %} {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="price" class="form-label">Product Price</label>
+            {% if err["price"] %}
+            <p class="text-danger">{{ err["price"] }}</p>
+            {% endif %}
+            <input
+              type="number"
+              class="form-control"
+              id="price"
+              step="0.01"
+              name="price"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="image" class="form-label">Product Image</label>
+            {% if err["image"] %}
+            <p class="text-danger">{{ err["image"] }}</p>
+            {% endif %}
+            <input type="file" class="form-control" id="image" name="image" />
+          </div>
+
+          <input type="number" name="id" hidden />
+        </div>
+        <div class="modal-footer">
+          <input
+            type="submit"
+            class="btn btn-primary"
+            name="addProduct"
+            value="Add"
+          />
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+    document.getElementById("category-{{ product['id'] }}").addEventListener('change', function() {
+      var categoryId = this.value;
+      var subcategoryDropdown = document.getElementById("subcategory-{{ product['id'] }}");
+
+      // Clear the current options
+      subcategoryDropdown.innerHTML = '<option value="">Select Subcategory</option>';
+
+      // Fetch subcategories based on the selected category
+      if (categoryId) {
+          // Assuming you have a JSON array with subcategories already available
+          var subcategories = {{ subcategories | json_encode() | raw }};
+          console.log({{ productId }});
+          subcategories.forEach(function(subcategory) {
+              if (subcategory.category_id == categoryId) {
+                  var option = document.createElement('option');
+                  option.value = subcategory.id;
+                  option.text = subcategory.name;
+                  subcategoryDropdown.appendChild(option);
+              }
+          });
+      }
+  });
+</script>
+
+{% endblock %}

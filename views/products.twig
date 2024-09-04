@@ -1,0 +1,78 @@
+{# products.twig#}
+
+<div class="container">
+  {% include("/components/productnav.twig") with {'user': user,
+  'categories':categories, 'subcategories':subcategories} %} {% if products %}
+  <section>
+    <div class="text-center">
+      <div class="row">
+        {% for product in products %}
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card">
+            <div
+              class="bg-image hover-zoom ripple ripple-surface ripple-surface-light"
+              data-mdb-ripple-color="light"
+            >
+              <img
+                src="../assets/imgs/products/{{ product['image'] }}"
+                class="w-100"
+                style="height: 300px"
+              />
+              <a href="ProductView.php?id={{ product.id }}">
+                <div class="mask"></div>
+                <div class="hover-overlay">
+                  <div
+                    class="mask"
+                    style="background-color: rgba(251, 251, 251, 0.15)"
+                  ></div>
+                </div>
+              </a>
+            </div>
+            <div class="card-body">
+              <a href="ProductView.php?id={{ product.id }}" class="text-reset">
+                <h5 class="card-title mb-2">{{ product.name }}</h5>
+              </a>
+              <a href="ProductView.php?id={{ product.id }}" class="text-reset">
+                <p>
+                  {% for category in categories %} {% if category.id ==
+                  product.category_id %}
+                  {{ category.name }}
+                  {% endif %} {% endfor %}
+                </p>
+              </a>
+              <h6 class="mb-3 price">{{ product.price }}$</h6>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  <nav
+    aria-label="Page navigation example"
+    class="d-flex justify-content-center mt-3"
+  >
+    <ul class="pagination">
+      {% if currentPage > 1 %}
+      <li class="page-item">
+        <a class="page-link" href="#" data-page="{{ currentPage - 1 }}"
+          >&laquo;</a
+        >
+      </li>
+      {% endif %} {% for page in 1..totalPages %}
+      <li class="page-item {% if page == currentPage %}active{% endif %}">
+        <a class="page-link" href="#" data-page="{{ page }}">{{ page }}</a>
+      </li>
+      {% endfor %} {% if currentPage < totalPages %}
+      <li class="page-item">
+        <a class="page-link" href="#" data-page="{{ currentPage + 1 }}"
+          >&raquo;</a
+        >
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+  {% else %}
+  <p>No products found.</p>
+  {% endif %}
+</div>

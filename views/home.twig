@@ -1,0 +1,10 @@
+{# home.twig #} {% extends 'homelayout.twig' %} {% block home %} {% if message
+%}
+<textarea name="message" id="message" hidden>{{ message }}</textarea>
+{% endif %} {% block products %}
+<main id="catalog">
+  {% include("Products.twig") with {'user': user, 'categories':categories,
+  'subcategories':subcategories, 'products':products, 'currentPage':
+  currentPage, 'totalPages': totalPages} %}
+</main>
+{% endblock %} {% endblock %}

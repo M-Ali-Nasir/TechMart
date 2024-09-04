@@ -1,0 +1,165 @@
+{% extends "dashboardlayout.twig" %} {% block main %}
+
+
+<div class="container py-5">
+
+  <div>
+    <h4 class="text-center">All Orders</h4>
+  </div>
+
+  
+  <table class="table mt-5 ">
+              
+    <thead>
+      <tr>
+        <th scope="col">Sr.</th>
+        <th scope="col">Order Id</th>
+        <th scope="col">Order Status</th>
+        <th scope="col">Customer Name</th>
+        <th scope="col">Order Price</th>
+        <th scope="col">Date</th>
+        <th scope="col">Options</th>
+        
+      </tr>
+    </thead>
+    <tbody class='' id="orders">
+  {% set orderCount = 1 %}
+  
+  {% if orders %}
+  {% for order in orders %} 
+
+
+
+<tr>
+  <th scope='row'>{{ orderCount }}</th>
+  <td>{{ order['id'] }}</td>
+  <td>{{ order['status'] }}</td>
+  {% for user in users %}
+  {% if user['id'] == order['user_id'] %}
+  
+  <td>{{ user['username'] }}</td> 
+  {% endif %} 
+  {% endfor %}
+  
+  <td>${{ order['total'] }}</td>
+  <td>{{ order['order_date'] }}</td>
+  <td>
+  <div>
+    <a href="OrderView.php?id={{ order['id'] }}" class="btn btn-primary me-2">View</a>
+     {% if order['status'] == "pending" %}
+    <a class='text-decoration-none text-primary me-3' href='Orders.php?id={{ order['id'] }}&status=shipped'>Shipped?</a>    
+    {% else %}
+      
+    {% if order['status'] == "shipped" %}
+    <a class='text-decoration-none text-success me-3' href='Orders.php?id={{ order['id'] }}&status=delivered'>Delivered?</a>
+    
+    {% else %}
+    {% if order['status'] == "delivered" %}
+    
+    <a class='text-decoration-none text-Danger me-3' href='Orders.php?id={{ order['id'] }}&status=cancelled'>Canceled?</a>       
+    {% endif %}
+    {% endif %}
+    {% endif %}
+
+
+
+  </td>
+  
+</tr>
+
+{# <tr>
+
+  <table class="table ms-5 me-5 mb-5">
+                          
+    <thead>
+      <tr>
+        <th scope="col">Sr.</th>
+        <th scope="col">Product</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Product Price</th>
+      </tr>
+    </thead>
+    <tbody class=''>
+
+      {% set itemCount = 1 %}
+      {% for item in order_items %}
+
+      {% if item['order_id'] == order['id'] %}
+      
+<tr>
+  <th scope='row'>{{ itemCount }}</th>
+  
+  {% for product in products %}
+
+  {% if product['id'] == item['product_id'] %}
+  
+  <td>${{ product['name'] }}</td>
+  <td>{{ item['quantity'] }}</td> 
+  <td>${{ product['price'] }}</td>
+  
+  {% endif %}  
+  {% endfor %}
+  
+</tr>
+{% set itemCount = itemCount + 1 %}
+{% endif %}
+{% endfor %}
+
+
+<tr>
+  <p class="fs-5"> Shipping Details</p>
+  {% for address in order_address %}
+  {% if address['order_id'] == order['id'] %}
+  <p> <strong>Name: </strong> {{ address['name'] }} <strong>Phone: </strong> {{ address['phone'] }} <strong>Address: </strong>
+ {{ address['address'] }} <strong>Zip Code: </strong> {{ address['zip_code'] }}
+  </p>
+  {% endif %}  
+  {% endfor %}
+  
+</tr>
+
+
+    </tbody>
+  </table>
+</tr> #}
+
+
+    
+  {% set orderCount = orderCount + 1 %}
+    {% endfor %}
+    {% endif %}
+  </tbody>
+</table>
+
+<nav
+aria-label="Page navigation example"
+class="d-flex justify-content-center mt-3"
+>
+<ul class="pagination" id="orders-pagination">
+  {% if currentPage > 1 %}
+  <li class="page-item">
+    <a class="page-link" href="#" data-page="{{ currentPage - 1 }}"
+      >&laquo;</a
+    >
+  </li>
+  {% endif %} {% for page in 1..totalPages %}
+  <li class="page-item {% if page == currentPage %}active{% endif %}">
+    <a class="page-link" href="#" data-page="{{ page }}">{{ page }}</a>
+  </li>
+  {% endfor %} {% if currentPage < totalPages %}
+  <li class="page-item">
+    <a class="page-link" href="#" data-page="{{ currentPage + 1 }}"
+      >&raquo;</a
+    >
+  </li>
+  {% endif %}
+</ul>
+</nav>
+
+  
+</div>
+
+
+{%
+endblock %}
+  

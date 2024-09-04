@@ -1,0 +1,143 @@
+{% extends "layout.twig" %} {% block main %} {% include "/components/nav.twig"
+with {'user': user, 'categories':categories, 'subcategories':subcategories,
+'products':products} %}
+
+<main class="py-5">
+  <div class="container">
+    <!-- Heading -->
+    <h2 class="my-5 text-center">Checkout form</h2>
+
+    <!--Grid row-->
+    <div class="row">
+      <!--Grid column-->
+
+      <div class="col-md-8 mb-4">
+        <form
+          role="form"
+          action="controllers/Checkout.php"
+          method="post"
+          name="cardpayment"
+          id="payment-form"
+        >
+          <!--Card-->
+          <div class="card p-4">
+            <!--email-->
+            <p class="mb-0">Name</p>
+            {% if err['name'] %}
+            <p class="text-danger">{{ err["name"] }}</p>
+            {% endif %}
+
+            <div class="form-outline mb-4">
+              <input
+                type="text"
+                class="form-control border border-1"
+                placeholder="XYZ"
+                name="name"
+                required
+              />
+            </div>
+
+            <p class="mb-0">Mobile Number</p>
+            {% if err['phone'] %}
+            <p class="text-danger">{{ err["phone"] }}</p>
+            {% endif %}
+            <div class="form-outline mb-4">
+              <input
+                type="text"
+                class="form-control border border-1"
+                placeholder="+xxxxxxxxxxxx"
+                name="phone"
+                required
+              />
+            </div>
+
+            <!--address-->
+            <p class="mb-0">Address</p>
+            {% if err['address'] %}
+            <p class="text-danger">{{ err["address"] }}</p>
+            {% endif %}
+            <div class="form-outline mb-4">
+              <input
+                type="text"
+                class="form-control border border-1"
+                placeholder="1234 Main St"
+                name="address"
+                required
+              />
+            </div>
+
+            <!--Grid column-->
+            <div class="col-lg-4 col-md-12 mb-4">
+              {% if err['zipcode'] %}
+              <p class="text-danger">{{ err["zipcode"] }}</p>
+              {% endif %}
+              <p class="mb-0">Zip Code</p>
+              <div class="form-outline">
+                <input
+                  type="text"
+                  class="form-control border border-1"
+                  name="zipcode"
+                  required
+                />
+              </div>
+            </div>
+            <!--Grid column-->
+
+            <!--Grid row-->
+
+            <hr class="mb-4" />
+            <button
+              class="btn btn-primary submit"
+              type="submit"
+              id="payBtn"
+              name="payBtn"
+            >
+              Continue to checkout
+            </button>
+          </div>
+          <!--/.Card-->
+        </form>
+      </div>
+      <!--Grid column-->
+
+      <!--Grid column-->
+      <div class="col-md-4 mb-4">
+        <!-- Heading -->
+        <h4 class="d-flex justify-content-between align-items-center mb-3">
+          <span class="text-muted">Your cart</span>
+          <span class="badge rounded-pill badge-primary">{{ totalItems }}</span>
+        </h4>
+
+        <!-- Cart -->
+        <ul class="list-group mb-3">
+          {% set subtotal = 0 %} {% if cart %} {% for item in cart %}
+          <li class="list-group-item d-flex justify-content-between">
+            <div>
+              <h6 class="my-0">{{ item["name"] }}</h6>
+              <small class="text-muted">{{ item["category"] }}</small>
+            </div>
+            <div>
+              <h6 class="text-muted">
+                ${{ item["price"] * item["quantity"] }}
+              </h6>
+              <small class="text-muted float-end"
+                >Quantity: {{ item["quantity"] }}</small
+              >
+            </div>
+          </li>
+          {% set subtotal = subtotal + item["quantity"] * item["price"] %} {%
+          endfor %} {% endif %}
+          <li class="list-group-item d-flex justify-content-between">
+            <span>Total (USD)</span>
+            <strong>${{ subtotal }}</strong>
+          </li>
+        </ul>
+        <!-- Cart -->
+      </div>
+      <!--Grid column-->
+    </div>
+    <!--Grid row-->
+  </div>
+</main>
+
+{% include "/components/footer.twig" %} {% endblock %}

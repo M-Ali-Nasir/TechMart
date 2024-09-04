@@ -1,0 +1,60 @@
+{% extends "dashboardlayout.twig" %} {% block main %}
+
+
+<div class="container py-5">
+
+  <div>
+    <h4 class="text-center">All Customer</h4>
+  </div>
+
+
+
+ 
+
+
+  <table class="table"
+                          
+    <thead>
+      <tr>
+        <th scope="col">id</th>
+        <th scope="col">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Category</th>
+        <th scope="col">Options</th>
+      </tr>
+    </thead>
+    <tbody class='employees-data'>
+
+{% if subcategories %}
+{% for subcategory in subcategories %}
+<tr>
+  <th scope='row'>{{ subcategory['id'] }}</th>
+  <td>{{ subcategory['name'] }}</td>
+  <td>{{ subcategory['description'] }}</td>
+  {% for category in categories %}
+    {% if category['id'] == subcategory['category_id'] %}
+    <td>{{ category['name'] }}</td>  
+    
+    {% endif %}
+  {% endfor %}
+  
+  <td>
+  <div>
+<a class='text-decoration-none text-success me-3' href='editEmployee.php?id=$id'>Edit</a>
+<button type='button' class='btn btn-danger btn_del' id='$id'>Delete</button>
+  </td>
+</tr>
+{% endfor %}
+{% endif %}
+
+
+
+    </tbody>
+
+  </table>
+ 
+</div>
+
+
+{%
+endblock %}

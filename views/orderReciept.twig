@@ -1,0 +1,36 @@
+{% extends "layout.twig" %} {% block main %} {% include "/components/nav.twig"
+with {'user': user} %}
+
+
+  <div class="container py-5">
+    
+    <div class="space-y-4 mb-6">
+      <h1 class="text-4xl fw-800">Thanks for your order, {{ user['username'] }}</h1>
+      <p>
+        We'll try our best to deliver your order as soon as possible.
+      </p>
+     
+    </div>
+    <div class="card rounded-3xl px-4 py-8 p-lg-10 mb-6">
+      <h3 class="text-center">Receipt from TechMart</h3>
+      <p class="text-center text-muted">{{ order['order_date'] }}</p>
+      <table class="p-2 w-full">
+        <tbody>
+         
+          <tr>
+            <td>{{ response['customer_details'].name }}</td>
+            <td class="text-right">{{response['customer_details'].email}}</td>
+          </tr>
+         
+          <tr>
+            <td class="fw-700 border-top">Amount paid</td>
+            <td class="fw-700 text-right border-top">${{ response['amount_total'] /100 }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <hr class="my-6" />
+     
+    </div>
+  </div>
+</body>
+ {% endblock %}

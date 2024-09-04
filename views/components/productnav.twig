@@ -1,0 +1,82 @@
+{# productnav.twig#}
+
+<nav
+  class="navbar navbar-expand-lg navbar-dark mt-3 mb-5 shadow p-2"
+  style="background-color: #34393b"
+>
+  <div class="container-fluid">
+    <h2 class="navbar-brand">Categories:</h2>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-mdb-toggle="collapse"
+      data-mdb-target="#navbarSupportedContent2"
+      aria-controls="navbarSupportedContent2"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent2">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a
+            class="nav-link text-white"
+            href="Home.php#catalog"
+            data-category-id="all"
+            >All</a
+          >
+        </li>
+        {% if categories %} {% for category in categories %}
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link text-white dropdown-toggle"
+            href="#"
+            data-category-id="{{ category.id }}"
+            id="navbarDropdown"
+            data-mdb-toggle="dropdown"
+            aria-expanded="false"
+            >{{ category.name }}</a
+          >
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            {% if subcategories %} {% for subcategory in subcategories %} {% if
+            subcategory.category_id == category.id %}
+            <li>
+              <a
+                class="dropdown-item"
+                href="#"
+                data-subcategory-id="{{ subcategory.id }}"
+                >{{ subcategory.name }}</a
+              >
+            </li>
+            {% endif %} {% endfor %} {% endif %}
+          </ul>
+        </li>
+        {% endfor %} {% endif %}
+      </ul>
+
+      <input
+        type="search"
+        class="form-control rounded-0"
+        aria-label="Search"
+        id="search-input"
+        name="search"
+        {%
+        if
+        search
+        %}
+        placeholder="{{ search }}"
+        {%
+        endif
+        %}
+      />
+      <button
+        type="button"
+        class="px-3 btn btn-primary rounded-0"
+        id="searchbtn"
+      >
+        Search
+      </button>
+    </div>
+  </div>
+</nav>

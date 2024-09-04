@@ -1,0 +1,51 @@
+{% extends "dashboardlayout.twig" %} {% block main %}
+
+
+<div class="container py-5">
+
+  <div>
+    <h4 class="text-center">All Customers</h4>
+  </div>
+
+
+
+ 
+
+
+  <table class="table"
+                          
+    <thead>
+      <tr>
+        <th scope="col">Sr.</th>
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Role</th>
+      </tr>
+    </thead>
+    <tbody class='employees-data'>
+
+{% if customers %}
+{% set customerCount = 1 %}
+{% for customer in customers %}
+<tr>
+  <th scope='row'>{{ customerCount }}</th>
+  <td>{{ customer['username'] }}</td>
+  <td>{{ customer['email'] }}</td>
+  <td>{{ customer['role'] }}</td>
+  
+</tr>
+{% set customerCount = customerCount + 1 %}
+{% endfor %}
+{% endif %}
+
+
+
+    </tbody>
+
+  </table>
+ 
+</div>
+
+
+{%
+endblock %}

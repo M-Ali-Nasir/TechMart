@@ -1,0 +1,85 @@
+.dropdown:hover > .dropdown-menu {
+  display: block;
+}
+
+.dropdown > .dropdown-toggle:active {
+  /*Without this, clicking will make it sticky*/
+  pointer-events: none;
+}
+
+.card {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+.footer-cta {
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px;
+}
+.price {
+  color: #263238;
+  font-size: 24px;
+}
+
+.card-title {
+  color: #263238;
+}
+
+.sale {
+  color: #e53935;
+}
+
+.sale-badge {
+  background-color: #e53935;
+}
+
+.ratings {
+  margin-right: 10px;
+}
+
+.ratings i {
+  color: #cecece;
+  font-size: 32px;
+}
+
+.rating-color {
+  color: #fbc634 !important;
+}
+
+.review-count {
+  font-weight: 400;
+  margin-bottom: 2px;
+  font-size: 24px !important;
+}
+
+.small-ratings i {
+  color: #cecece;
+}
+
+.review-stat {
+  font-weight: 300;
+  font-size: 18px;
+  margin-bottom: 2px;
+}
+
+.star-rating {
+  direction: rtl; /* Right-to-left for displaying stars in the correct order */
+  unicode-bidi: bidi-override;
+  font-size: 2em;
+  display: inline-block;
+}
+
+.star-rating input[type="radio"] {
+  display: none; /* Hide radio buttons */
+}
+
+.star-rating label {
+  color: #ddd;
+  cursor: pointer;
+}
+
+.star-rating input[type="radio"]:checked ~ label {
+  color: #f5c518; /* Highlight stars when selected */
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+  color: #f5c518; /* Highlight stars on hover */
+}

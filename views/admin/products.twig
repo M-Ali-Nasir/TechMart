@@ -1,0 +1,143 @@
+{% extends "dashboardlayout.twig" %} {% block main %}
+
+
+
+<div class="container py-5">
+
+  <a type="button"  class="btn btn-primary" href="AddProduct.php">Add new Product</a>
+  <div>
+    <h4 class="text-center">All Products</h4>
+  </div>
+
+
+
+ 
+
+
+  <table class="table"
+                          
+    <thead>
+      <tr>
+        <th scope="col">Sr.</th>
+        <th scope="col">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Category</th>
+        <th scope="col">Subcategory</th>
+        <th scope="col">price</th>
+        <th scope="col">Options</th>
+      </tr>
+    </thead>
+    <tbody class='employees-data' id="products">
+
+{% if products %}
+{% set productCount = 1 %}
+
+{% for product in products %}
+<tr>
+  <th scope='row'>{{ productCount }}</th>
+  <td>{{ product['name'] }}</td>
+  <td>{{ product['description'] }}</td>
+
+  {% for category in categories %}
+    {% if category['id'] == product['category_id'] %}
+    <td>{{ category['name'] }}</td>
+    
+    {% endif %}
+  {% endfor %}
+  
+  {% for subcategory in subcategories %}
+    {% if subcategory['id'] == product['subcategory_id'] %}
+    <td>{{ subcategory['name'] }}</td>
+    
+    {% set productCount = productCount + 1 %}
+    {% endif %}
+  {% endfor %}
+  <td>{{ product['price'] }}</td>
+  <td>
+  <div>
+
+
+    
+
+    <!-- Button trigger modal -->
+<a type="button"  class="btn btn-primary" href="EditProduct.php?id={{ product['id'] }}">Edit</a>
+
+
+
+
+<button type='button' class='deletebtn btn btn-danger' data-name="{{ product['name'] }}" data-id="{{ product['id'] }}" id="deletebtn{{ product['id'] }}">Delete</button>
+  </td>
+</tr>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  
+  document.addEventListener('DOMContentLoaded', function () {
+    // Add event listener to delete button
+    //var productId = document.getElementsByClassName("deletebtn").getAttribute('data-id');
+    
+    document.getElementById('deletebtn'+{{ product['id'] }}).addEventListener('click', function (e) {
+        e.preventDefault(); // Prevent the default form submission or link click
+         // Get the product ID from data attribute
+         var productId = this.getAttribute('data-id');
+        var productName = this.getAttribute('data-name');
+        // Show SweetAlert confirmation
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you really want to delete the product "+productName+"?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If user confirms, proceed with the deletion
+                // Example: You could redirect to a delete URL or send an AJAX request
+                window.location.href = 'DeleteProduct.php?id=' + productId;
+            }
+        });
+    });
+});
+</script>
+
+{% endfor %}
+{% endif %}
+
+
+
+    </tbody>
+
+  </table>
+
+  <nav
+aria-label="Page navigation example"
+class="d-flex justify-content-center mt-3"
+>
+<ul class="pagination" id="products-pagination">
+  {% if currentPage > 1 %}
+  <li class="page-item">
+    <a class="page-link-product" href="#" data-page="{{ currentPage - 1 }}"
+      >&laquo;</a
+    >
+  </li>
+  {% endif %} {% for page in 1..totalPages %}
+  <li class="page-item {% if page == currentPage %}active{% endif %}">
+    <a class="page-link product-link" href="#" data-page="{{ page }}">{{ page }}</a>
+  </li>
+  {% endfor %} {% if currentPage < totalPages %}
+  <li class="page-item">
+    <a class="page-link product-link" href="#" data-page="{{ currentPage + 1 }}"
+      >&raquo;</a
+    >
+  </li>
+  {% endif %}
+</ul>
+</nav>
+
+</div>
+
+
+
+{%
+endblock %}
